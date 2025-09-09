@@ -1,4 +1,4 @@
-//© pato - mua
+//© Zero - Código libre no comercial
 
 
 // Cargar el SVG y animar los corazones
@@ -61,16 +61,16 @@ fetch('Img/treelove.svg')
     });
   });
 
-// Efecto máquina de escribir para el texto de dedicatoria
+// Efecto máquina de escribir para el texto de dedicatoria (seguidores)
 function getURLParam(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
-function showDedicationText() { //
+function showDedicationText() { //seguidores
   let text = getURLParam('text');
   if (!text) {
-    text = `Para mi precioso:\n\nCuando te vi esa noche supe que serias para mi 💕🥺.Solo tu me hace sentir en casa.\n\nGracias por acompañarme siempre , por ser mi compañero ✨,por entenderme incluso en silencio, por llenar mis días de amor.💓\n\nTe amo más de lo que las palabras pueden expresar🥹💞,y solo quiero que sepas que eres lo mejor que me pudo pasar.`;  } else {
+    text = `Para el amor de mi vida:\n\nDesde el primer momento supe que eras tú. Tu sonrisa, tu voz, tu forma de ser… todo en ti me hace sentir en casa.\n\nGracias por acompañarme en cada paso, por entenderme incluso en silencio, y por llenar mis días de amor.\n\nTe amo más de lo que las palabras pueden expresar.`;  } else {
     text = decodeURIComponent(text).replace(/\\n/g, '\n');
   }
   const container = document.getElementById('dedication-text');
@@ -101,7 +101,7 @@ function showSignature() {
     dedication.appendChild(signature);
   }
   let firma = getURLParam('firma');
-  signature.textContent = firma ? decodeURIComponent(firma) : "Con amor, QUEEN";
+  signature.textContent = firma ? decodeURIComponent(firma) : "Con amor, Zero";
   signature.classList.add('visible');
 }
 
@@ -146,8 +146,8 @@ function showCountdown() {
   const container = document.getElementById('countdown');
   let startParam = getURLParam('start');
   let eventParam = getURLParam('event');
-  let startDate = startParam ? new Date(startParam + 'T00:00:00') : new Date('2025-05-28T00:00:00'); 
-  let eventDate = eventParam ? new Date(eventParam + 'T00:00:00') : new Date('2026-08-28T00:00:00');
+  let startDate = startParam ? new Date(startParam + 'T00:00:00') : new Date('2024-08-03T00:00:00'); 
+  let eventDate = eventParam ? new Date(eventParam + 'T00:00:00') : new Date('2025-08-03T00:00:00');
 
   function update() {
     const now = new Date();
@@ -172,6 +172,39 @@ function showCountdown() {
 function playBackgroundMusic() {
   const audio = document.getElementById('bg-music');
   if (!audio) return;
+
+  // --- Opción archivo local por parámetro 'musica' ---
+  let musicaParam = getURLParam('musica');
+  if (musicaParam) {
+    // Decodifica y previene rutas maliciosas
+    musicaParam = decodeURIComponent(musicaParam).replace(/[^\w\d .\-]/g, '');
+    audio.src = 'Music/' + musicaParam;
+  }
+
+  // --- Opción YouTube (solo mensaje de ayuda) ---
+  let youtubeParam = getURLParam('youtube');
+  if (youtubeParam) {
+    // Muestra mensaje de ayuda para descargar el audio
+    let helpMsg = document.getElementById('yt-help-msg');
+    if (!helpMsg) {
+      helpMsg = document.createElement('div');
+      helpMsg.id = 'yt-help-msg';
+      helpMsg.style.position = 'fixed';
+      helpMsg.style.right = '18px';
+      helpMsg.style.bottom = '180px';
+      helpMsg.style.background = 'rgba(255,255,255,0.95)';
+      helpMsg.style.color = '#e60026';
+      helpMsg.style.padding = '10px 16px';
+      helpMsg.style.borderRadius = '12px';
+      helpMsg.style.boxShadow = '0 2px 8px #e6002633';
+      helpMsg.style.fontSize = '1.05em';
+      helpMsg.style.zIndex = 100;
+      helpMsg.innerHTML = 'Para usar música de YouTube, descarga el audio (por ejemplo, usando y2mate, 4K Video Downloader, etc.), colócalo en la carpeta <b>Music</b> y usa la URL así:<br><br><code>?musica=nombre.mp3</code>';
+      document.body.appendChild(helpMsg);
+      setTimeout(() => { if(helpMsg) helpMsg.remove(); }, 15000);
+    }
+  }
+
   let btn = document.getElementById('music-btn');
   if (!btn) {
     btn = document.createElement('button');
